@@ -1,16 +1,45 @@
-import Things.Player;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glTranslatef;
+
+import com.bulletphysics.collision.broadphase.BroadphaseInterface;
+import com.bulletphysics.collision.broadphase.DbvtBroadphase;
+import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
+import com.bulletphysics.dynamics.DynamicsWorld;
+import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
+import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 
 public class Level {
     private float cameraX;
     private float cameraY;
-    private Player player;
-    private final float scale = 5.0f;
     
     private LevelData levelData;
-    
+
+    // physics crap
+    private DynamicsWorld world = null;
+    private DefaultCollisionConfiguration cConfig;
+    private CollisionDispatcher dispatcher;
+    private BroadphaseInterface broadphase;
+    private ConstraintSolver solver;
+        
+    public Level() {
+        init();
+    }
     
     public void init() {
+        // physics crap
+        cConfig = new DefaultCollisionConfiguration();
+        dispatcher = new CollisionDispatcher(cConfig);
+        broadphase = new DbvtBroadphase();
+        solver = new SequentialImpulseConstraintSolver();
+        world = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, cConfig);
+
+        levelData = new LevelData();
+        levelData.init(world);
+        
 //        blockList = new ArrayList<RectangularThing>();
 //        for (int i = 0; i < HEIGHT; i++) {
 //            for (int j = 0; j < WIDTH; j++) {
@@ -32,15 +61,11 @@ public class Level {
 //                }
 //            }
 //        }
-        
-        levelData = new LevelData();
-        levelData.init();
-        player = new Player(scale*10f, scale*5f);
-        
+                
     }
     
     public void draw() {
-        setCamera(player.getX(), player.getY()+9.0f);
+        setCamera(50f, 34f);
 
         glPushMatrix();
         
@@ -63,26 +88,6 @@ public class Level {
         cameraX += x;
         cameraY += y;
     }
-    public void movePlayer(float dx) {
-        //float newX = player.getX() + dx;
-        //if (newX > scale*1.0f && newX < scale*(WIDTH-1.0f)) {
-        //    player.move(dx, 0.0f);
-        //}
-        
-        
-        
-        player.move(dx, 0.0f);
-    }
-    public void accelPlayer(float ax, float ay) {
-        player.setDx(player.getDx() + ax);
-        player.setDy(player.getDy() + ay);
-    }
-    public void updatePlayerPosition() {
-        player.setDx(player.getDx() * 0.6f);
-
-    }
-    
-
-    
+   
 
 }

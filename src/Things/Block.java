@@ -1,20 +1,35 @@
 package Things;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_AMBIENT_AND_DIFFUSE;
+import static org.lwjgl.opengl.GL11.GL_FLAT;
+import static org.lwjgl.opengl.GL11.GL_FRONT;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glMaterial;
+import static org.lwjgl.opengl.GL11.glNormal3f;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glShadeModel;
+import static org.lwjgl.opengl.GL11.glTranslatef;
+import static org.lwjgl.opengl.GL11.glVertex3f;
+
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 
+import CustomExceptions.NegativeSizeException;
 
+// Defines a cube-shaped block at a specified position
 public class Block extends RectangularThing {
    
     // TEMP- just to get this working
     FloatBuffer blue;
     
     // Constructor
-    public Block(float x_in, float y_in, float width_in, float height_in) {
-        super(x_in, y_in, width_in, height_in);
+    public Block(float x_in, float y_in, float z_in, float size) throws NegativeSizeException {
+        super(x_in, y_in, z_in, size, size, size);
         
-        blue = BufferUtils.createFloatBuffer(4).put(new float[] { 0.2f, 0.2f, 1.0f, 1.0f});
+        blue = BufferUtils.createFloatBuffer(4).put(new float[] {0.2f, 0.2f, 1.0f, 1.0f});
         blue.flip();
     }
 
