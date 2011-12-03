@@ -61,7 +61,7 @@ public class Game {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             level.draw();
-            
+            level.update();
             Display.update();
             
             long elapsed = System.currentTimeMillis() - startTime; 
@@ -119,7 +119,7 @@ public class Game {
 //        System.err.println("glLoadTransposeMatrixfARB() supported: " + GLContext.getCapabilities().GL_ARB_transpose_matrix);
 
         float h = (float) WIN_HEIGHT / (float) WIN_WIDTH;
-        glFrustum(-1.0f, 1.0f, -h, h, 5.0f, 400.0f);
+        glFrustum(-1.0f, 1.0f, -h, h, 5.0f, 500.0f);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 

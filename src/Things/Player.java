@@ -17,26 +17,26 @@ import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import CustomExceptions.NegativeSizeException;
 
-
-public class Player extends MoveableThing {
+public class Player extends RectangularThing {
    
     // TEMP- just to get this working
     FloatBuffer red;
     
     public Player(float x_in, float y_in) {
-        super(x_in, y_in, 4f, 2f);
-        try {
-            setDepth(2.0f);
-        } catch (NegativeSizeException e) {
-            System.out.println("huh?... " + e.getMessage());
-        }
-        
-        red = BufferUtils.createFloatBuffer(4).put(new float[] { 1.0f, 0.0f, 0.0f, 1.0f});
-        red.flip();
+        super(x_in, y_in, 0f, 2f, 4f, 2f);
+        init();
     }
     
+    public Player() {
+        super(0f, 0f, 0f, 2f, 4f, 2f);
+        init();
+    }
+   
+    public void init() {
+        red = BufferUtils.createFloatBuffer(4).put(new float[] { 1.0f, 0.0f, 0.0f, 1.0f});
+        red.flip();    
+    }
 
     public void draw() {
         glMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);

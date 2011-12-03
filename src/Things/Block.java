@@ -10,23 +10,23 @@ import static org.lwjgl.opengl.GL11.glNormal3f;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glShadeModel;
-import static org.lwjgl.opengl.GL11.glTranslatef;
 import static org.lwjgl.opengl.GL11.glVertex3f;
 
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 
-import CustomExceptions.NegativeSizeException;
+import com.bulletphysics.linearmath.Transform;
 
 // Defines a cube-shaped block at a specified position
 public class Block extends RectangularThing {
-   
     // TEMP- just to get this working
     FloatBuffer blue;
+    private static FloatBuffer floatBuf = BufferUtils.createFloatBuffer(16);
     
     // Constructor
-    public Block(float x_in, float y_in, float z_in, float size) throws NegativeSizeException {
+    public Block(float x_in, float y_in, float z_in, float size) {
         super(x_in, y_in, z_in, size, size, size);
         
         blue = BufferUtils.createFloatBuffer(4).put(new float[] {0.2f, 0.2f, 1.0f, 1.0f});
@@ -39,7 +39,16 @@ public class Block extends RectangularThing {
         
         glPushMatrix();
         
-        glTranslatef(x, y, 0.0f);
+        Transform tr = new Transform();
+        tr.set(motionState.graphicsWorldTrans);
+        
+        float[] glMat = new float[16];
+        tr.getOpenGLMatrix(glMat);
+        floatBuf.clear();
+        floatBuf.put(glMat).flip();
+        GL11.glMultMatrix(floatBuf);
+
+       //glTranslatef(x, y, 0.0f);
         
         glBegin(GL_QUADS);
         

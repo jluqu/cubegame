@@ -3,6 +3,8 @@ import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
+import javax.vecmath.Vector3f;
+
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
@@ -11,6 +13,8 @@ import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.linearmath.Clock;
+
 
 public class Level {
     private float cameraX;
@@ -24,6 +28,7 @@ public class Level {
     private CollisionDispatcher dispatcher;
     private BroadphaseInterface broadphase;
     private ConstraintSolver solver;
+    private Clock clock;
         
     public Level() {
         init();
@@ -36,7 +41,9 @@ public class Level {
         broadphase = new DbvtBroadphase();
         solver = new SequentialImpulseConstraintSolver();
         world = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, cConfig);
-
+        world.setGravity(new Vector3f(0f, -10f, 0f));
+        clock = new Clock();
+        
         levelData = new LevelData();
         levelData.init(world);
         
@@ -62,6 +69,18 @@ public class Level {
 //            }
 //        }
                 
+    }
+    public void update() {
+        // simple dynamics world doesn't handle fixed-time-stepping
+        float ms = clock.getTimeMicroseconds();
+        clock.reset();
+        
+        // step the simulation
+        if (world != null) {
+            world.stepSimulation(ms / 1000000f);
+        }
+        
+        //levelData.update();
     }
     
     public void draw() {

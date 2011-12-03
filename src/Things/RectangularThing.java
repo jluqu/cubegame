@@ -11,9 +11,13 @@ public abstract class RectangularThing extends RigidThing {
     public float depth = 1.0f;
     
     public RectangularThing(float x_in, float y_in, float z_in, 
-                            float width_in, float height_in, float depth_in) throws NegativeSizeException {
+                            float width_in, float height_in, float depth_in) {
         super(x_in, y_in, z_in);
-        setSize(width_in, height_in, depth_in);
+        try {
+            setSize(width_in, height_in, depth_in);
+        } catch (NegativeSizeException e) {
+            System.out.println("huh?... " + e.getMessage());
+        }
     }
     
     public void setSize(float width_in, float height_in, float depth_in) throws NegativeSizeException {
