@@ -75,18 +75,7 @@ public class Game {
             } else {
               // TODO: come up with a clever way to print an under fpsLimit warning, but just once in a while!                
             }
-            
-            
-//           if (startTime > System.currentTimeMillis()) {
-//               fps++;
-//           } else {
-//               long timeUsed = 5000 + (startTime - System.currentTimeMillis());
-//               startTime = System.currentTimeMillis() + 5000;
-//               System.out.println(fps + " frames in " + timeUsed / 1000f + " seconds = "
-//                       + (fps / (timeUsed / 1000f)));
-//               fps = 0;
-//           }
-            
+
         }
     }
 
@@ -98,7 +87,7 @@ public class Game {
         Display.setTitle("Game Test Framework");
         Display.create();
 
-        FloatBuffer pos = BufferUtils.createFloatBuffer(4).put(new float[] { 50.0f, 100.0f, -100.0f, 0.0f});
+        FloatBuffer pos = BufferUtils.createFloatBuffer(4).put(new float[] { 60.0f, 100.0f, 100.0f, 0.0f});
         pos.flip();
         glLight(GL_LIGHT0, GL_POSITION, pos);
         
@@ -111,13 +100,6 @@ public class Game {
 
         glMatrixMode(GL_PROJECTION);
 
-//        System.err.println("LWJGL: " + Sys.getVersion() + " / " + LWJGLUtil.getPlatformName());
-//        System.err.println("GL_VENDOR: " + glGetString(GL_VENDOR));
-//        System.err.println("GL_RENDERER: " + glGetString(GL_RENDERER));
-//        System.err.println("GL_VERSION: " + glGetString(GL_VERSION));
-//        System.err.println();
-//        System.err.println("glLoadTransposeMatrixfARB() supported: " + GLContext.getCapabilities().GL_ARB_transpose_matrix);
-
         float h = (float) WIN_HEIGHT / (float) WIN_WIDTH;
         glFrustum(-1.0f, 1.0f, -h, h, 5.0f, 500.0f);
         glMatrixMode(GL_MODELVIEW);
@@ -125,6 +107,5 @@ public class Game {
 
         
         level = new Level();
-        level.init();
     }
 }

@@ -22,19 +22,25 @@ import com.bulletphysics.linearmath.Transform;
 // Defines a cube-shaped block at a specified position
 public class Block extends RectangularThing {
     // TEMP- just to get this working
-    FloatBuffer blue;
+    FloatBuffer color;
     private static FloatBuffer floatBuf = BufferUtils.createFloatBuffer(16);
     
     // Constructor
     public Block(float x_in, float y_in, float z_in, float size) {
         super(x_in, y_in, z_in, size, size, size);
-        
-        blue = BufferUtils.createFloatBuffer(4).put(new float[] {0.2f, 0.2f, 1.0f, 1.0f});
-        blue.flip();
+    
+        // TODO: (PERFORMANCE!) use a single float buffer for each color
+        color = BufferUtils.createFloatBuffer(4);
+        setColor(.2f, .2f, 1f);
     }
 
+    public void setColor(float r, float g, float b) {
+        color.put(new float[] {r, g, b, 1.0f});
+        color.flip();
+    }
+    
     public void draw() {
-        glMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, blue);
+        glMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
         glShadeModel(GL_FLAT);
         
         glPushMatrix();
@@ -49,45 +55,51 @@ public class Block extends RectangularThing {
         GL11.glMultMatrix(floatBuf);
 
        //glTranslatef(x, y, 0.0f);
+
+        float halfWidth = width/2f;
+        float halfHeight = height/2f;
+        float halfDepth = depth/2f;
         
+        //TODO: (PERFORMANCE!) This can probably be optimized once I figure out what I'm doing
+        //TODO: One of the faces is getting drawn darker than the other ones, not sure why
         glBegin(GL_QUADS);
-        
+
         // left
-        glNormal3f(-1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, height, depth);
-        glVertex3f(0.0f, height, 0.0f);
-        glVertex3f(0.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, depth);
+        glNormal3f(-1f, 0f, 0f);
+        glVertex3f(-halfWidth, halfHeight, halfDepth);
+        glVertex3f(-halfWidth, halfHeight, -halfDepth);
+        glVertex3f(-halfWidth, -halfHeight, -halfDepth);
+        glVertex3f(-halfWidth, -halfHeight, halfDepth);
         // right
-        glNormal3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(width, 0.0f, depth);
-        glVertex3f(width, 0.0f, 0.0f);
-        glVertex3f(width, height, 0.0f);
-        glVertex3f(width, height, depth);
+        glNormal3f(1f, 0f, 0f);
+        glVertex3f(halfWidth, -halfHeight, halfDepth);
+        glVertex3f(halfWidth, -halfHeight, -halfDepth);
+        glVertex3f(halfWidth, halfHeight, -halfDepth);
+        glVertex3f(halfWidth, halfHeight, halfDepth);
         // top
-        glNormal3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, height, depth);
-        glVertex3f(width, height, depth);
-        glVertex3f(width, height, 0.0f);
-        glVertex3f(0.0f, height, 0.0f);
+        glNormal3f(0f, 1f, 0f);
+        glVertex3f(-halfWidth, halfHeight, halfDepth);
+        glVertex3f(halfWidth, halfHeight, halfDepth);
+        glVertex3f(halfWidth, halfHeight, -halfDepth);
+        glVertex3f(-halfWidth, halfHeight, -halfDepth);
         // bottom
-        glNormal3f(0.0f, -1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 0.0f);
-        glVertex3f(width, 0.0f, 0.0f);
-        glVertex3f(width, 0.0f, depth);
-        glVertex3f(0.0f, 0.0f, depth);
+        glNormal3f(0f, -1f, 0f);
+        glVertex3f(-halfWidth, -halfHeight, -halfDepth);
+        glVertex3f(halfWidth, -halfHeight, -halfDepth);
+        glVertex3f(halfWidth, -halfHeight, halfDepth);
+        glVertex3f(-halfWidth, -halfHeight, halfDepth);
         // back
-        glNormal3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(0.0f, height, 0.0f);
-        glVertex3f(width, height, 0.0f);
-        glVertex3f(width, 0.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 0.0f);
+        glNormal3f(0f, 0f, -1f);
+        glVertex3f(-halfWidth, halfHeight, -halfDepth);
+        glVertex3f(halfWidth, halfHeight, -halfDepth);
+        glVertex3f(halfWidth, -halfHeight, -halfDepth);
+        glVertex3f(-halfWidth, -halfHeight, -halfDepth);
         // front
-        glNormal3f(0.0f, 0.0f, -1.0f);
-        glVertex3f(0.0f, height, depth);
-        glVertex3f(0.0f, 0.0f, depth);
-        glVertex3f(width, 0.0f, depth);
-        glVertex3f(width, height, depth);
+        glNormal3f(0f, 0f, 1f);
+        glVertex3f(-halfWidth, halfHeight, halfDepth);
+        glVertex3f(-halfWidth, -halfHeight, halfDepth);
+        glVertex3f(halfWidth, -halfHeight, halfDepth);
+        glVertex3f(halfWidth, halfHeight, halfDepth);
         glEnd();
         
         glPopMatrix();

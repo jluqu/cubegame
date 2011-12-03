@@ -33,8 +33,8 @@ public abstract class RectangularThing extends RigidThing {
         if (depth_in < 0f) {
             throw new NegativeSizeException("Rectangular thing depth was < 0");
         }
-        // TODO: should check negative sizes and throw negative size exception
-        shape = new BoxShape(new Vector3f(width, height, depth));    
+        // TODO: (PERFORMANCE!) use a common shape object for all similar blocks
+        shape = new BoxShape(new Vector3f(width/2f, height/2f, depth/2f));
     }
     
     public float getWidth() { return width; }

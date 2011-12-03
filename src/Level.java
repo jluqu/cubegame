@@ -41,11 +41,12 @@ public class Level {
         broadphase = new DbvtBroadphase();
         solver = new SequentialImpulseConstraintSolver();
         world = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, cConfig);
-        world.setGravity(new Vector3f(0f, -10f, 0f));
+        world.setGravity(new Vector3f(0f, -20f, 0f));
         clock = new Clock();
         
         levelData = new LevelData();
         levelData.init(world);
+
         
 //        blockList = new ArrayList<RectangularThing>();
 //        for (int i = 0; i < HEIGHT; i++) {
@@ -79,8 +80,6 @@ public class Level {
         if (world != null) {
             world.stepSimulation(ms / 1000000f);
         }
-        
-        //levelData.update();
     }
     
     public void draw() {

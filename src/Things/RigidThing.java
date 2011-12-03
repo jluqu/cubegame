@@ -64,7 +64,11 @@ public abstract class RigidThing {
         mass = mass_in;
         if (mass > 0) {
             isStatic = false;
+            if (shape != null) {
+                shape.calculateLocalInertia(mass, inertia);
+            }
         }
+
     }
     
     public void setStatic(boolean isStatic_in) {
