@@ -1,88 +1,34 @@
 package Things;
-import static org.lwjgl.opengl.GL11.GL_AMBIENT_AND_DIFFUSE;
-import static org.lwjgl.opengl.GL11.GL_FLAT;
-import static org.lwjgl.opengl.GL11.GL_FRONT;
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glMaterial;
-import static org.lwjgl.opengl.GL11.glNormal3f;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glShadeModel;
-import static org.lwjgl.opengl.GL11.glTranslatef;
-import static org.lwjgl.opengl.GL11.glVertex3f;
 
-import java.nio.FloatBuffer;
+import javax.vecmath.Vector3f;
+import CustomExceptions.NegativeSizeException;
+import com.bulletphysics.collision.shapes.BoxShape;
 
-import org.lwjgl.BufferUtils;
-
-
-public class Player extends RectangularThing {
-   
-    // TEMP- just to get this working
-    FloatBuffer red;
-    
+// this is gonna change later.... a lot
+public class Player extends Block {
+	
     public Player(float x_in, float y_in) {
-        super(x_in, y_in, 0f, 2f, 4f, 2f);
+        super(x_in, y_in, 0f, 4f);
         init();
     }
     
     public Player() {
-        super(0f, 0f, 0f, 2f, 4f, 2f);
+        super(0f, 0f, 0f, 4f);
         init();
     }
-   
+    
     public void init() {
-        red = BufferUtils.createFloatBuffer(4).put(new float[] { 1.0f, 0.0f, 0.0f, 1.0f});
-        red.flip();    
-    }
+        shape = new BoxShape(new Vector3f(2f, 2f, 2f));
 
-    public void draw() {
-        glMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
-        glShadeModel(GL_FLAT);
-        glPushMatrix();
-        glTranslatef(x, y, 0.0f);
-        
-        glBegin(GL_QUADS);
-        // left
-        glNormal3f(-1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, height, depth);
-        glVertex3f(0.0f, height, 0.0f);
-        glVertex3f(0.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, depth);
-        // right
-        glNormal3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(width, 0.0f, depth);
-        glVertex3f(width, 0.0f, 0.0f);
-        glVertex3f(width, height, 0.0f);
-        glVertex3f(width, height, depth);
-        // top
-        glNormal3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, height, depth);
-        glVertex3f(width, height, depth);
-        glVertex3f(width, height, 0.0f);
-        glVertex3f(0.0f, height, 0.0f);
-        // bottom
-        glNormal3f(0.0f, -1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 0.0f);
-        glVertex3f(width, 0.0f, 0.0f);
-        glVertex3f(width, 0.0f, depth);
-        glVertex3f(0.0f, 0.0f, depth);
-        // back
-        glNormal3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(0.0f, height, 0.0f);
-        glVertex3f(width, height, 0.0f);
-        glVertex3f(width, 0.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 0.0f);
-        // front
-        glNormal3f(0.0f, 0.0f, -1.0f);
-        glVertex3f(0.0f, height, depth);
-        glVertex3f(0.0f, 0.0f, depth);
-        glVertex3f(width, 0.0f, depth);
-        glVertex3f(width, height, depth);
-        glEnd();
-        
-        glPopMatrix();
+        setColor(0f, 1f, 0f);
+        setStatic(false);
+        try {
+        	setMass(1f);
+        } catch (NegativeSizeException e) {
+        	System.out.println("huh?... " + e.getMessage());
+        }
+        initRigidBody();
+        getRigidBody().setFriction(0.3f);
+        //clobberInertia();
     }
 }

@@ -1,10 +1,27 @@
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_LIGHT0;
+import static org.lwjgl.opengl.GL11.GL_LIGHTING;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_NORMALIZE;
+import static org.lwjgl.opengl.GL11.GL_POSITION;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glFrustum;
+import static org.lwjgl.opengl.GL11.glLight;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
     
@@ -40,23 +57,23 @@ public class Game {
         float fpsLimit = 60;
         long loopDuration = (long)(1.0f/fpsLimit * 1000.0f); 
         
-//        //Keyboard.enableRepeatEvents(true);
-//        int leftKey = Keyboard.KEY_LEFT;
-//        int rightKey = Keyboard.KEY_RIGHT;
-//        int jumpKey = Keyboard.KEY_SPACE;
+        //Keyboard.enableRepeatEvents(true);
+        int leftKey = Keyboard.KEY_LEFT;
+        int rightKey = Keyboard.KEY_RIGHT;
+        int jumpKey = Keyboard.KEY_SPACE;
         
         while (!Display.isCloseRequested()) {
             long startTime = System.currentTimeMillis();
             
-//            if (Keyboard.isKeyDown(leftKey)) {
-//                level.accelPlayer(-0.2f, 0.0f);
-//            }
-//            if (Keyboard.isKeyDown(rightKey)) {
-//                level.accelPlayer(0.2f, 0.0f);
-//            }
-//            if (Keyboard.isKeyDown(jumpKey) && level.playerIsGrounded()) {
-//                level.accelPlayer(0.0f, 1.0f);
-//            }
+            if (Keyboard.isKeyDown(leftKey)) {
+                level.accelPlayer(-40f, 0.0f);
+            }
+            if (Keyboard.isKeyDown(rightKey)) {
+                level.accelPlayer(40f, 0.0f);
+            }
+            if (Keyboard.isKeyDown(jumpKey)) {
+                level.jumpPlayer(10.0f);
+            }
             
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             

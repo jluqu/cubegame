@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import javax.vecmath.Vector3f;
 
+import Things.Player;
+
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
@@ -29,6 +31,7 @@ public class Level {
     private BroadphaseInterface broadphase;
     private ConstraintSolver solver;
     private Clock clock;
+    private Player player;
         
     public Level() {
         init();
@@ -41,35 +44,11 @@ public class Level {
         broadphase = new DbvtBroadphase();
         solver = new SequentialImpulseConstraintSolver();
         world = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, cConfig);
-        world.setGravity(new Vector3f(0f, -20f, 0f));
+        world.setGravity(new Vector3f(0f, -80f, 0f));
         clock = new Clock();
         
         levelData = new LevelData();
-        levelData.init(world);
-
-        
-//        blockList = new ArrayList<RectangularThing>();
-//        for (int i = 0; i < HEIGHT; i++) {
-//            for (int j = 0; j < WIDTH; j++) {
-//                if (data[i][j] == 1) {
-//                    Block b;
-//                    try {
-//                        b = new Block((float)j*scale, 
-//                                      (float)(HEIGHT-i)*scale,
-//                                      scale*0.9f,
-//                                      scale*0.9f);
-//                        //b.setWidth(scale*0.9f);
-//                        //b.setHeight(scale*0.9f);
-//                        b.setDepth(scale*0.9f);
-//                        
-//                        blockList.add(b);
-//                    } catch (NegativeSizeException e) {
-//                        System.out.println("huh?... " + e.getMessage());
-//                    }
-//                }
-//            }
-//        }
-                
+        levelData.init(world, player);
     }
     public void update() {
         // simple dynamics world doesn't handle fixed-time-stepping
@@ -106,6 +85,11 @@ public class Level {
         cameraX += x;
         cameraY += y;
     }
-   
-
+    
+    public void jumpPlayer(float force) {
+    	levelData.jumpPlayer(force);
+    }
+    public void accelPlayer(float ax, float ay) {
+    	levelData.accelPlayer(ax, ay);
+    }
 }

@@ -6,6 +6,7 @@ import javax.vecmath.Vector3f;
 import CustomExceptions.NegativeSizeException;
 import Things.Block;
 import Things.InvisibleBarrier;
+import Things.Player;
 import Things.RigidThing;
 
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -20,8 +21,9 @@ public class LevelData {
     
     private final int HEIGHT = 13;
     private final int WIDTH = 21;
-    
     private final float scale = 5.0f;
+    
+    private Player player;
 
     private int data[][] = {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
                             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -37,8 +39,10 @@ public class LevelData {
                             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
                             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
     
-    public void init(DynamicsWorld world) {
-        things = new ArrayList<RigidThing>();
+    public void init(DynamicsWorld world, Player player_in) {
+        
+    	
+    	things = new ArrayList<RigidThing>();
         
         float blockWidth = scale*0.95f;
         CollisionShape wallBlockShape = new BoxShape(new Vector3f(blockWidth/2f, blockWidth/2f, blockWidth/2f));
@@ -81,7 +85,7 @@ public class LevelData {
             rb.setFriction(.2f);
     
             //b2.getRigidBody().setLinearVelocity(new Vector3f(-10f, 20f, 0f));
-            rb.applyForce(new Vector3f(10f + x0*20, (float)(10*i), 0f), new Vector3f(0f, 0.2f, 0f));
+            rb.applyForce(new Vector3f(10f + x0*30, (float)(20*i), 0f), new Vector3f(0f, 0.2f, 0f));
             
             //b2.getRigidBody().applyTorque(new Vector3f(0f, 0f, 500f));
             
@@ -111,6 +115,10 @@ public class LevelData {
         ib2.setStatic(true);
         world.addRigidBody(ib2.getRigidBody());
         
+        player = new Player(15f, 15f);
+        world.addRigidBody(player.getRigidBody());
+        things.add(player);
+        
     }
     
     public void draw() {
@@ -123,4 +131,11 @@ public class LevelData {
         }
     }
     
+    public void accelPlayer(float ax, float ay) {
+    	player.getRigidBody().applyCentralForce(new Vector3f(ax, ay, 0f));
+    }
+    
+    public void jumpPlayer(float force) {
+    	player.getRigidBody().applyCentralImpulse(new Vector3f(0f, force, 0f));
+    }
 }

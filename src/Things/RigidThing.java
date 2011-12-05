@@ -77,6 +77,9 @@ public abstract class RigidThing {
             }
         }
     }
+    public void clobberInertia() {
+    	inertia =  new Vector3f(0f, 0f, 0f);
+    }
     
     public void setStatic(boolean isStatic_in) {
         isStatic = isStatic_in;
