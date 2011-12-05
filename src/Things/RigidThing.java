@@ -39,6 +39,13 @@ public abstract class RigidThing {
         }
     }
     
+    public CollisionShape getShape() {
+    	return shape;
+    }
+    public void setShape(CollisionShape shape_in) {
+    	shape = shape_in;
+    }
+    
     public void moveTo(float x_in, float y_in, float z_in) {
         x = x_in;
         y = y_in;
@@ -64,11 +71,11 @@ public abstract class RigidThing {
         mass = mass_in;
         if (mass > 0) {
             isStatic = false;
+            CollisionShape shape = getShape();
             if (shape != null) {
                 shape.calculateLocalInertia(mass, inertia);
             }
         }
-
     }
     
     public void setStatic(boolean isStatic_in) {
