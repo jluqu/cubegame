@@ -9,8 +9,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class Game {
     
     private Level level;
-    private final int WIN_HEIGHT = 520;
-    private final int WIN_WIDTH = 840;
+    private final int WIN_HEIGHT = 700;
+    private final int WIN_WIDTH = 1000;
     
     public static void main(String[] args) {
         new Game().execute();
