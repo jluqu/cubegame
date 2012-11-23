@@ -6,7 +6,6 @@ import CustomExceptions.NegativeSizeException;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
@@ -30,9 +29,12 @@ public abstract class RigidThing {
 
     // call this after shape has been created
     public void initRigidBody() {
-        if (motionState != null && shape != null && inertia != null) {
-            RigidBodyConstructionInfo info = new RigidBodyConstructionInfo(mass, motionState, shape, inertia);
-            body = new RigidBody(info);
+        if (motionState != null && shape != null) {
+            if (inertia == null) {
+                body = new RigidBody(mass, motionState, shape);                
+            } else {
+                body = new RigidBody(mass, motionState, shape, inertia);
+            }
         } else {
             // TODO: make this an exception
             System.out.println("Ow! Something was null! TODO: make this an exception");
@@ -78,7 +80,7 @@ public abstract class RigidThing {
         }
     }
     public void clobberInertia() {
-    	inertia =  new Vector3f(0f, 0f, 0f);
+    	inertia = null;
     }
     
     public void setStatic(boolean isStatic_in) {

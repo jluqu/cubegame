@@ -65,8 +65,8 @@ public class LevelData {
         }
         
         // test cubes we're gonna send a'tumblin
-        int numCubes = 50;
-        float cubeWidth = scale * .5f;
+        int numCubes = 40;
+        float cubeWidth = scale * .4f;
         CollisionShape testCubeShape = new BoxShape(new Vector3f(cubeWidth/2f, cubeWidth/2f, cubeWidth/2f));
         for (int i = 0; i < numCubes; i++) {
             float x0 = 2f*scale + (float)(i % 10)*(cubeWidth+1f);

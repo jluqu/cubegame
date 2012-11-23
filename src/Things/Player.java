@@ -27,8 +27,9 @@ public class Player extends Block {
         } catch (NegativeSizeException e) {
         	System.out.println("huh?... " + e.getMessage());
         }
+        //clobberInertia();
         initRigidBody();
         getRigidBody().setFriction(0.3f);
-        //clobberInertia();
+        getRigidBody().setAngularFactor(0f);
     }
 }
