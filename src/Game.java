@@ -61,8 +61,10 @@ public class Game {
         int leftKey = Keyboard.KEY_LEFT;
         int rightKey = Keyboard.KEY_RIGHT;
         int jumpKey = Keyboard.KEY_SPACE;
+        int escapeKey = Keyboard.KEY_ESCAPE;
+        boolean done = false;
         
-        while (!Display.isCloseRequested()) {
+        while (!Display.isCloseRequested() && !done) {
             long startTime = System.currentTimeMillis();
             
             if (Keyboard.isKeyDown(leftKey)) {
@@ -73,6 +75,9 @@ public class Game {
             }
             if (Keyboard.isKeyDown(jumpKey)) {
                 level.jumpPlayer(10.0f);
+            }
+            if (Keyboard.isKeyDown(escapeKey)) {
+                done = true;
             }
             
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
